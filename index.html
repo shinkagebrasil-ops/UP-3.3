@@ -1,0 +1,818 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
+    <meta name="theme-color" content="#0a0a0b">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Shin Kage">
+    <!-- Splash Screens iOS -->
+    <link rel="apple-touch-startup-image" href="splash-2048x2732.png" media="(device-width: 1024px) and (device-height: 1366px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)">
+    <link rel="apple-touch-startup-image" href="splash-2732x2048.png" media="(device-width: 1024px) and (device-height: 1366px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)">
+    <link rel="apple-touch-startup-image" href="splash-1170x2532.png" media="(device-width: 390px) and (device-height: 844px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)">
+    <title>SHIN KAGE CRIPTO</title>
+    <link rel="manifest" href="manifest.json">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Lottie Player for Splash Animation -->
+    <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&family=Space+Grotesk:wght@500;600;700&display=swap');
+        :root { --safe-top: env(safe-area-inset-top); --safe-bottom: env(safe-area-inset-bottom); }
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        body { font-family: 'Inter', system-ui, sans-serif; background: #0a0a0b; color: #e4e4e7; min-height: 100vh; overscroll-behavior: none; padding-top: var(--safe-top); padding-bottom: var(--safe-bottom); }
+        .app { max-width: 420px; margin: 0 auto; padding: 20px 18px calc(28px + var(--safe-bottom)); }
+        .header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; }
+        .brand { display: flex; align-items: center; gap: 12px; }
+        .brand-icon { width: 42px; height: 42px; border-radius: 12px; background: #7f1d1d; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 0 1px #991b1b; }
+        .brand-name { font-family: 'Space Grotesk', sans-serif; font-size: 20px; font-weight: 700; letter-spacing: -0.5px; }
+        .brand-sub { font-size: 9px; color: #ef4444; font-weight: 700; letter-spacing: 3px; margin-top: 1px; }
+        .status-pill { display: inline-flex; align-items: center; gap: 6px; padding: 5px 12px; border-radius: 99px; background: #18181b; border: 1px solid #27272a; font-size: 11px; font-weight: 600; }
+        .status-pill.online { background: #052e16; border-color: #166534; }
+        .pill-dot { width: 7px; height: 7px; border-radius: 50%; background: #ef4444; }
+        .status-pill.online .pill-dot { background: #22c55e; animation: blink 1.8s infinite; }
+        .pill-label { color: #ef4444; }
+        .status-pill.online .pill-label { color: #4ade80; }
+        @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.35} }
+        .canal-card { background: #111113; border: 1px solid #27272a; border-radius: 16px; padding: 14px 18px; margin-bottom: 16px; }
+        .canal-row { display: flex; align-items: center; justify-content: space-between; }
+        .canal-label { font-size: 9px; color: #52525b; letter-spacing: 3px; font-weight: 700; margin-bottom: 3px; }
+        .canal-code { font-family: 'Space Grotesk', sans-serif; font-size: 34px; font-weight: 700; color: #4ade80; letter-spacing: 6px; }
+        .canal-mode { font-size: 10px; color: #71717a; margin-top: 2px; }
+        .ops-count { text-align: right; }
+        .ops-num { font-size: 28px; font-weight: 900; }
+        .ops-lbl { font-size: 9px; color: #52525b; letter-spacing: 2px; font-weight: 700; }
+        .ops-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; padding-top: 10px; border-top: 1px solid #1f1f23; min-height: 0; }
+        .op-chip { padding: 4px 10px; border-radius: 6px; background: #18181b; border: 1px solid #27272a; font-size: 11px; font-weight: 700; color: #71717a; transition: all .15s; }
+        .op-chip.me { border-color: #4ade80; color: #4ade80; background: #052e16; }
+        .op-chip.talking { border-color: #f59e0b; color: #0a0a0b; background: #f59e0b; animation: chip-pulse .5s infinite alternate; }
+        @keyframes chip-pulse { to { opacity:.7; } }
+        .op-chip.peer { border-color: #60a5fa; color: #60a5fa; background: #172554; }
+        .crypto-badge { display: inline-flex; align-items: center; gap: 6px; font-size: 10px; padding: 5px 12px; border-radius: 99px; background: #052e16; color: #4ade80; border: 1px solid #166534; margin-bottom: 20px; }
+        .power-wrap { display: flex; justify-content: center; margin-bottom: 16px; }
+        .power-btn { width: 160px; height: 160px; border-radius: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center; border: none; color: white; cursor: pointer; transition: transform .15s, box-shadow .15s; font-family: 'Space Grotesk', sans-serif; }
+        .power-btn.off { background: linear-gradient(145deg, #ef4444, #991b1b); box-shadow: 0 20px 40px -10px rgba(239,68,68,.4); }
+        .power-btn.on { background: linear-gradient(145deg, #22c55e, #15803d); box-shadow: 0 0 0 10px rgba(34,197,94,.2), 0 20px 40px -10px rgba(34,197,94,.4); }
+        .power-btn:active { transform: scale(.94); }
+        .power-icon { font-size: 44px; margin-bottom: 6px; }
+        .power-label { font-size: 18px; font-weight: 700; letter-spacing: -0.5px; }
+        .power-sub { font-size: 9px; opacity: .6; letter-spacing: 2px; margin-top: 1px; }
+        .connecting-ring { width: 160px; height: 160px; border-radius: 50%; border: 3px solid #27272a; border-top-color: #4ade80; animation: spin .9s linear infinite; display: none; position: absolute; pointer-events: none; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .power-outer { position: relative; display: inline-flex; align-items: center; justify-content: center; }
+        .conn-status { text-align: center; font-size: 13px; color: #71717a; margin-bottom: 16px; line-height: 1.5; min-height: 20px; }
+        .controls { display: flex; justify-content: center; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
+        .ctrl-btn { display: flex; align-items: center; gap: 6px; padding: 9px 16px; border-radius: 99px; background: #18181b; border: 1px solid #27272a; color: #a1a1aa; font-size: 12px; font-weight: 600; cursor: pointer; transition: all .15s; }
+        .ctrl-btn:hover { background: #27272a; color: #e4e4e7; }
+        .ctrl-btn:active { transform: scale(.95); }
+        .ptt-wrap { display: flex; justify-content: center; margin-bottom: 20px; }
+        .ptt-btn { width: 210px; height: 210px; border-radius: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center; background: #27272a; border: none; color: white; cursor: pointer; transition: all .06s ease; box-shadow: 0 0 0 1px #3f3f46, 0 24px 48px -12px rgba(0,0,0,.6), inset 0 2px 0 rgba(255,255,255,.08); -webkit-tap-highlight-color: transparent; touch-action: none; }
+        .ptt-btn:disabled { opacity: .35; cursor: not-allowed; pointer-events: none; }
+        .ptt-btn.transmitting { background: linear-gradient(145deg, #166534, #14532d); box-shadow: 0 0 80px rgba(34,197,94,.8), 0 0 0 16px rgba(34,197,94,.18), inset 0 2px 0 rgba(255,255,255,.2); animation: ptt-glow 1.1s infinite ease-in-out; transform: scale(.98); }
+        @keyframes ptt-glow { 0%,100% { box-shadow: 0 0 80px rgba(34,197,94,.8), 0 0 0 14px rgba(34,197,94,.18); } 50% { box-shadow: 0 0 120px rgba(34,197,94,1), 0 0 0 22px rgba(34,197,94,.12); } }
+        .ptt-icon { font-size: 54px; margin-bottom: 6px; transition: all .1s; }
+        .ptt-label { font-family: 'Space Grotesk', sans-serif; font-size: 26px; font-weight: 700; letter-spacing: -0.5px; }
+        .ptt-sub { font-size: 10px; opacity: .5; letter-spacing: 1.5px; margin-top: 2px; }
+        .notif { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); background: #166534; color: #fff; padding: 8px 20px; border-radius: 99px; font-size: 12px; font-weight: 600; z-index: 99999; white-space: nowrap; pointer-events: none; animation: notif-in .25s ease; }
+        @keyframes notif-in { from { opacity:0; transform:translateX(-50%) translateY(8px); } to { opacity:1; transform:translateX(-50%) translateY(0); } }
+        .modal-bg { position: fixed; inset: 0; background: rgba(0,0,0,.88); z-index: 9999; display: flex; align-items: center; justify-content: center; padding: 20px; }
+        .modal-box { background: #111113; border: 1px solid #27272a; border-radius: 20px; max-width: 400px; width: 100%; padding: 24px; max-height: 88vh; overflow-y: auto; }
+        .modal-title { font-family: 'Space Grotesk', sans-serif; font-size: 16px; font-weight: 700; color: #4ade80; margin-bottom: 6px; }
+        .modal-sub { font-size: 12px; color: #71717a; margin-bottom: 18px; }
+        .modal-input { width: 100%; background: #18181b; border: 1px solid #3f3f46; border-radius: 10px; padding: 12px 14px; color: #e4e4e7; font-size: 14px; font-family: inherit; outline: none; transition: border-color .15s; margin-bottom: 10px; }
+        .modal-input:focus { border-color: #4ade80; }
+        .modal-input::placeholder { color: #52525b; }
+        .modal-btn { width: 100%; padding: 13px; border: none; border-radius: 10px; font-size: 14px; font-weight: 700; cursor: pointer; transition: all .12s; font-family: 'Space Grotesk', sans-serif; }
+        .modal-btn:active { transform: scale(.97); }
+        .modal-btn.primary { background: #166534; color: #4ade80; margin-bottom: 8px; }
+        .modal-btn.primary:hover { background: #15803d; }
+        .modal-btn.secondary { background: #1e40af; color: #93c5fd; margin-bottom: 8px; }
+        .modal-btn.danger { background: #27272a; color: #a1a1aa; }
+        .modal-btn.danger:hover { background: #3f3f46; }
+        .pq-row { display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 6px; }
+        .pq-label { font-size: 11px; color: #4ade80; cursor: pointer; }
+        input[type=checkbox] { accent-color: #22c55e; width: 14px; height: 14px; cursor: pointer; }
+        #install-btn { display: none; align-items: center; gap: 6px; padding: 9px 18px; border-radius: 99px; background: transparent; border: 1px solid #166534; color: #4ade80; font-size: 12px; font-weight: 600; cursor: pointer; margin: 0 auto 8px; transition: background .15s; }
+        #install-btn:hover { background: #052e16; }
+        .footer { text-align: center; font-size: 10px; color: #3f3f46; margin-top: 8px; line-height: 1.6; }
+        button { font-family: 'Inter', system-ui, sans-serif; }
+    </style>
+</head>
+<body>
+    <!-- Splash Screen with Lottie Animation + CSS Fallback for Offline -->
+    <div id="splash-screen" style="position: fixed; inset: 0; background: #0a0a0b; display: flex; align-items: center; justify-content: center; z-index: 10000; flex-direction: column;">
+        <div id="splash-lottie-fallback" style="width: 280px; height: 280px; display: none; align-items: center; justify-content: center;">
+            <div style="width: 180px; height: 180px; border: 8px solid #4ade80; border-radius: 50%; animation: pulse 1.5s infinite ease-in-out;"></div>
+        </div>
+        <lottie-player id="splash-lottie" src="https://assets4.lottiefiles.com/packages/lf20_4l9m4k.json" background="transparent" speed="1" style="width: 280px; height: 280px;" loop autoplay></lottie-player>
+        <div style="margin-top: 20px; color: #4ade80; font-family: 'Space Grotesk', sans-serif; font-size: 24px; font-weight: 700; letter-spacing: -0.5px;">SHIN KAGE</div>
+        <div style="color: #71717a; font-size: 14px; margin-top: 8px;">CRIPTO • TÁTICO</div>
+    </div>
+
+    <style>
+        @keyframes pulse {
+            0%, 100% { transform: scale(0.8); opacity: 0.6; }
+            50% { transform: scale(1.1); opacity: 1; }
+        }
+    </style>
+
+    <!-- Audio for Splash Sound Effect (Opus ultra-otimizado - ~9KB) -->
+    <audio id="splash-sound" src="./beep-opus.opus" preload="auto"></audio>
+
+<div class="app">
+    <div class="header">
+        <div class="brand">
+            <div class="brand-icon"><img src="icon-512.png" style="width:100%;height:100%;border-radius:12px;object-fit:cover;" alt="Shin Kage"></div>
+            <div><div class="brand-name">SHIN KAGE</div><div class="brand-sub">CRIPTO</div></div>
+        </div>
+        <div id="status-pill" class="status-pill">
+            <div class="pill-dot"></div><span class="pill-label" id="pill-text">OFFLINE</span>
+        </div>
+    </div>
+
+    <div style="text-align:center;margin-bottom:18px;">
+        <div class="crypto-badge">
+            <i class="fa-solid fa-shield-halved"></i>
+            <span id="crypto-badge-text">Criptografia E2E Nativa WebRTC (DTLS+SRTP)</span>
+        </div>
+    </div>
+
+    <div class="canal-card" id="canal-card" style="display:none;">
+        <div class="canal-row">
+            <div>
+                <div class="canal-label">CANAL</div>
+                <div class="canal-code" id="canal-code">—</div>
+                <div class="canal-mode" id="canal-mode">Internet</div>
+            </div>
+            <div class="ops-count">
+                <div class="ops-num" id="ops-num">1</div>
+                <div class="ops-lbl">OPERADORES</div>
+            </div>
+        </div>
+        <div class="ops-chips" id="ops-chips"></div>
+    </div>
+
+    <div class="power-wrap">
+        <div class="power-outer">
+            <div class="connecting-ring" id="connecting-ring"></div>
+            <button class="power-btn off" id="power-btn" onclick="togglePower()">
+                <i class="fa-solid fa-power-off power-icon" id="power-icon"></i>
+                <div class="power-label" id="power-label">LIGAR</div>
+                <div class="power-sub">RÁDIO</div>
+            </button>
+        </div>
+    </div>
+
+    <div class="conn-status" id="conn-status">Toque em Ligar para conectar</div>
+
+    <div class="pq-row">
+        <input type="checkbox" id="pq-toggle">
+        <label class="pq-label" for="pq-toggle">Modo Pós-Quântico (ML-KEM) - UI only</label>
+    </div>
+
+    <div class="controls">
+        <button class="ctrl-btn" onclick="showAudioDeviceSelector()">
+            <i class="fa-solid fa-headset"></i> Bluetooth
+        </button>
+    </div>
+
+    <div class="ptt-wrap">
+        <button class="ptt-btn" id="ptt-btn" disabled
+            onmousedown="startPTT(event)" onmouseup="stopPTT(event)" onmouseleave="stopPTT(event)"
+            ontouchstart="startPTT(event)" ontouchend="stopPTT(event)" ontouchcancel="stopPTT(event)">
+            <i class="fa-solid fa-microphone ptt-icon" id="ptt-icon"></i>
+            <div class="ptt-label" id="ptt-label">PTT</div>
+            <div class="ptt-sub" id="ptt-sub">SEGURE E FALE</div>
+        </button>
+    </div>
+
+    <button id="install-btn" onclick="installPWA()">
+        <i class="fa-solid fa-download"></i> Instalar no Celular
+    </button>
+
+    <div class="footer">
+        Comunicação criptografada E2E • PWA instalável<br>
+        Modo Tático • Topologia Estrela (Host = Hub de Comando)
+    </div>
+</div>
+
+<audio id="ptt-sound" src="./alerta-beep-nextel-e139.mp3" preload="auto"></audio>
+
+<script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.min.js"></script>
+
+<script>
+// SHIN KAGE CRIPTO v2 - REVISADO E PADRONIZADO PARA OPERAÇÕES REAIS
+// Topologia Estrela • Múltiplos operadores • Broadcasting de status • Host ouve todos
+
+let skPeer = null;
+let skConnections = [];
+let skActiveCalls = new Map();
+let skLocalStream = null;
+let skLocalAudioTrack = null;
+let skAudioContext = null;
+let skIsTransmitting = false;
+let skIsOnline = false;
+let skIsHost = false;
+let skMyCodename = localStorage.getItem('sk_codename') || '';
+let skConnectedOperators = [];
+let skCurrentlySpeaking = null;
+let skRemoteAudios = new Map();
+let skSelectedMicDeviceId = null;
+let skSelectedSpeakerDeviceId = null;
+let skAudioDevices = { input: [], output: [] };
+let skWakeLock = null;
+let skReconnectAttempts = 0;
+let skPttTouchId = null;
+
+const powerBtn = document.getElementById('power-btn');
+const powerIcon = document.getElementById('power-icon');
+const powerLabel = document.getElementById('power-label');
+const pttBtn = document.getElementById('ptt-btn');
+const pttSound = document.getElementById('ptt-sound');
+const pttIcon = document.getElementById('ptt-icon');
+const pttLabel = document.getElementById('ptt-label');
+const pttSub = document.getElementById('ptt-sub');
+const statusPill = document.getElementById('status-pill');
+const pillText = document.getElementById('pill-text');
+const connStatus = document.getElementById('conn-status');
+const canalCard = document.getElementById('canal-card');
+const canalCode = document.getElementById('canal-code');
+const canalMode = document.getElementById('canal-mode');
+const opsNum = document.getElementById('ops-num');
+const opsChips = document.getElementById('ops-chips');
+const connectingRing = document.getElementById('connecting-ring');
+
+function skPlayChirp(type = 'start') {
+    try {
+        if (!skAudioContext) skAudioContext = new (window.AudioContext || window.webkitAudioContext)();
+        if (skAudioContext.state === 'suspended') skAudioContext.resume();
+        const o = skAudioContext.createOscillator();
+        const g = skAudioContext.createGain();
+        o.type = type === 'start' ? 'sawtooth' : 'sine';
+        const t = skAudioContext.currentTime;
+        if (type === 'start') {
+            o.frequency.setValueAtTime(1220, t); o.frequency.linearRampToValueAtTime(680, t + .07);
+            g.gain.setValueAtTime(.22, t); g.gain.linearRampToValueAtTime(.001, t + .09);
+        } else {
+            o.frequency.setValueAtTime(680, t); o.frequency.linearRampToValueAtTime(1100, t + .1);
+            g.gain.setValueAtTime(.18, t); g.gain.linearRampToValueAtTime(.001, t + .12);
+        }
+        o.connect(g); g.connect(skAudioContext.destination);
+        o.start(t); o.stop(t + .15);
+    } catch(e){}
+}
+
+function skShowNotif(msg, color = '#166534') {
+    document.querySelectorAll('.notif').forEach(n => n.remove());
+    const el = document.createElement('div');
+    el.className = 'notif';
+    el.style.background = color;
+    el.textContent = msg;
+    document.body.appendChild(el);
+    setTimeout(() => { el.style.transition = 'opacity .3s'; el.style.opacity = '0'; setTimeout(() => el.remove(), 300); }, 2400);
+}
+
+function skCreateModal(innerHTML) {
+    const bg = document.createElement('div');
+    bg.className = 'modal-bg';
+    bg.innerHTML = `<div class="modal-box">${innerHTML}</div>`;
+    bg.addEventListener('click', e => { if (e.target === bg) bg.remove(); });
+    document.body.appendChild(bg);
+    return bg;
+}
+
+function skBroadcast(data) {
+    const json = JSON.stringify(data);
+    skConnections.forEach(c => { if (c && c.open) { try { c.send(json); } catch(e){} } });
+}
+
+function skBroadcastExcept(exceptConn, data) {
+    const json = JSON.stringify(data);
+    skConnections.forEach(c => { if (c && c.open && c !== exceptConn) { try { c.send(json); } catch(e){} } });
+}
+
+function skSyncOperatorsTo(conn) {
+    if (!skIsHost || !conn || !conn.open) return;
+    const list = skConnectedOperators.map(o => o.codename);
+    conn.send(JSON.stringify({ type: 'sync_operators', operators: list }));
+}
+
+function skHandleMsg(data, fromConn = null) {
+    try {
+        const msg = typeof data === 'string' ? JSON.parse(data) : data;
+        if (msg.type === 'identify') {
+            if (!skConnectedOperators.find(o => o.codename === msg.codename)) {
+                skConnectedOperators.push({ codename: msg.codename, isMe: false });
+                skUpdateOpsUI();
+                skShowNotif(`${msg.codename} entrou no canal`);
+                if (skIsHost) {
+                    skSyncOperatorsTo(fromConn);
+                    skBroadcastExcept(fromConn, { type: 'operator_joined', codename: msg.codename });
+                }
+            }
+        }
+        if (msg.type === 'sync_operators' && !skIsHost) {
+            msg.operators.forEach(codename => {
+                if (!skConnectedOperators.find(o => o.codename === codename) && codename !== skMyCodename) {
+                    skConnectedOperators.push({ codename, isMe: false });
+                }
+            });
+            skUpdateOpsUI();
+        }
+        if (msg.type === 'speaking') {
+            skCurrentlySpeaking = msg.codename;
+            skUpdateOpsUI();
+            if (skIsHost && fromConn) skBroadcastExcept(fromConn, msg);
+        }
+        if (msg.type === 'stopped_speaking') {
+            if (skCurrentlySpeaking === msg.codename) skCurrentlySpeaking = null;
+            skUpdateOpsUI();
+            if (skIsHost && fromConn) skBroadcastExcept(fromConn, msg);
+        }
+        if (msg.type === 'operator_joined' && !skIsHost) {
+            if (!skConnectedOperators.find(o => o.codename === msg.codename)) {
+                skConnectedOperators.push({ codename: msg.codename, isMe: false });
+                skUpdateOpsUI();
+            }
+        }
+    } catch(e){}
+}
+
+function skUpdateOpsUI() {
+    const all = skConnectedOperators;
+    opsNum.textContent = all.length;
+    opsChips.innerHTML = all.map(op => {
+        let cls = op.isMe ? 'op-chip me' : 'op-chip peer';
+        if (skCurrentlySpeaking === op.codename) cls = 'op-chip talking';
+        return `<span class="${cls}">${op.codename}</span>`;
+    }).join('');
+    const mode = canalMode.textContent;
+    if (!mode.includes('Aguardando') && all.length > 1) canalMode.textContent = canalMode.textContent.replace('Aguardando operadores...','');
+}
+
+function skUpdateUIOnline() {
+    skIsOnline = true;
+    powerBtn.classList.replace('off', 'on');
+    powerIcon.className = 'fa-solid fa-check-circle power-icon';
+    powerLabel.textContent = 'DESLIGAR';
+    statusPill.classList.add('online');
+    pillText.textContent = 'ONLINE';
+    pttBtn.disabled = false;
+    powerBtn.disabled = false;
+}
+
+function skUpdateUIOffline() {
+    skIsOnline = false;
+    powerBtn.classList.replace('on', 'off');
+    powerIcon.className = 'fa-solid fa-power-off power-icon';
+    powerLabel.textContent = 'LIGAR';
+    statusPill.classList.remove('online');
+    pillText.textContent = 'OFFLINE';
+    pttBtn.disabled = true;
+    pttBtn.classList.remove('transmitting');
+    pttIcon.className = 'fa-solid fa-microphone ptt-icon';
+    pttLabel.textContent = 'PTT'; pttLabel.style.color = '';
+    pttSub.textContent = 'SEGURE E FALE'; pttSub.style.color = '';
+    canalCard.style.display = 'none';
+    connStatus.textContent = 'Toque em Ligar para conectar';
+    connectingRing.style.display = 'none';
+    powerBtn.disabled = false;
+}
+
+async function skAcquireAudioStream(deviceId = null) {
+    if (skLocalStream) { skLocalStream.getTracks().forEach(t => t.stop()); skLocalStream = null; skLocalAudioTrack = null; }
+    try {
+        const constraints = { audio: { echoCancellation: true, noiseSuppression: true, autoGainControl: true, sampleRate: 48000, channelCount: 1, ...(deviceId && { deviceId: { exact: deviceId } }) } };
+        skLocalStream = await navigator.mediaDevices.getUserMedia(constraints);
+        skLocalAudioTrack = skLocalStream.getAudioTracks()[0];
+        if (skLocalAudioTrack) skLocalAudioTrack.enabled = false;
+        return true;
+    } catch(e) {
+        skShowNotif('Microfone bloqueado. Verifique permissões.', '#991b1b');
+        connectingRing.style.display = 'none';
+        return false;
+    }
+}
+
+async function skConnectCreate() {
+    if (!await skAcquireAudioStream(skSelectedMicDeviceId)) return;
+    const shortCode = Math.floor(1000 + Math.random() * 9000).toString();
+    connStatus.textContent = 'Criando canal seguro...';
+    skIsHost = true;
+    skPeer = new Peer(`shin-kage-${shortCode}`);
+
+    skPeer.on('open', () => {
+        connectingRing.style.display = 'none';
+        canalCode.textContent = shortCode;
+        canalMode.textContent = 'Modo Internet • Host (Líder/TOC)';
+        canalCard.style.display = 'block';
+        connStatus.innerHTML = `Host do canal <strong>${shortCode}</strong> • Compartilhe o código`;
+        skConnectedOperators = [{ codename: skMyCodename, isMe: true }];
+        skUpdateOpsUI();
+        skUpdateUIOnline();
+        skShowNotif(`Canal ${shortCode} criado! Host ativo.`);
+    });
+
+    skPeer.on('connection', incomingConn => {
+        skConnections.push(incomingConn);
+        incomingConn.on('open', () => {
+            incomingConn.send(JSON.stringify({ type: 'identify', codename: skMyCodename }));
+            skSyncOperatorsTo(incomingConn);
+        });
+        incomingConn.on('data', (data) => skHandleMsg(data, incomingConn));
+        incomingConn.on('close', () => { skConnections = skConnections.filter(c => c !== incomingConn); skUpdateOpsUI(); });
+    });
+
+    skPeer.on('call', call => {
+        if (skLocalStream) {
+            call.answer(skLocalStream);
+            skActiveCalls.set(call.peer, call);
+            skSetupCallEvents(call);
+        }
+    });
+    skPeer.on('error', (err) => { skShowNotif('Erro na conexão PeerJS', '#991b1b'); console.error('[SHIN KAGE]', err); connectingRing.style.display = 'none'; });
+}
+
+async function skConnectJoin() {
+    const shortCode = await skAskChannelCode();
+    if (!shortCode) { 
+        connectingRing.style.display = 'none'; 
+        powerBtn.disabled = false;
+        return; 
+    }
+
+    // CORRIGIDO: Pede NOME LIVRE (Bruno, Paula, José...) em vez de número
+    const joinerName = await skAskJoinerName();
+    skMyCodename = joinerName || 'Operador';
+
+    if (!await skAcquireAudioStream(skSelectedMicDeviceId)) {
+        powerBtn.disabled = false;
+        return;
+    }
+    connStatus.textContent = `Conectando ao canal ${shortCode}...`;
+    skIsHost = false;
+    skPeer = new Peer();
+
+    skPeer.on('open', () => {
+        const targetId = `shin-kage-${shortCode}`;
+        const dataConn = skPeer.connect(targetId, { reliable: true });
+        skConnections.push(dataConn);
+        dataConn.on('open', () => {
+            canalCode.textContent = shortCode;
+            canalMode.textContent = 'Modo Internet • Operador';
+            canalCard.style.display = 'block';
+            dataConn.send(JSON.stringify({ type: 'identify', codename: skMyCodename }));
+            connStatus.innerHTML = `Conectado no canal <strong>${shortCode}</strong> • Codinome: <strong>${skMyCodename}</strong>`;
+            skConnectedOperators = [{ codename: skMyCodename, isMe: true }];
+            skUpdateOpsUI();
+            skUpdateUIOnline();
+            skRequestWakeLock();
+            skShowNotif(`Conectado ao canal ${shortCode}!`);
+            connectingRing.style.display = 'none';
+            setTimeout(() => {
+                if (skLocalStream && skPeer) {
+                    try {
+                        const mediaCall = skPeer.call(targetId, skLocalStream);
+                        skActiveCalls.set(targetId, mediaCall);
+                        skSetupCallEvents(mediaCall);
+                    } catch(e){}
+                }
+            }, 450);
+        });
+        dataConn.on('data', (data) => skHandleMsg(data, dataConn));
+        dataConn.on('close', () => skAttemptReconnect());
+    });
+
+    skPeer.on('call', call => {
+        if (skLocalStream) {
+            call.answer(skLocalStream);
+            skActiveCalls.set(call.peer, call);
+            skSetupCallEvents(call);
+        }
+    });
+    skPeer.on('error', (err) => { 
+        connStatus.textContent = 'Erro ao conectar no canal.'; 
+        skShowNotif('Falha na conexão', '#991b1b'); 
+        connectingRing.style.display = 'none'; 
+        powerBtn.disabled = false;
+        skIsOnline = false;
+        console.error('[SHIN KAGE] Erro no join:', err);
+    });
+}
+
+function skSetupCallEvents(call) {
+    call.on('stream', remoteStream => {
+        let audioEl = skRemoteAudios.get(call.peer);
+        if (!audioEl) {
+            audioEl = document.createElement('audio');
+            audioEl.autoplay = true;
+            audioEl.style.display = 'none';
+            document.body.appendChild(audioEl);
+            skRemoteAudios.set(call.peer, audioEl);
+        }
+        audioEl.srcObject = remoteStream;
+        if (skSelectedSpeakerDeviceId && typeof audioEl.setSinkId === 'function') {
+            audioEl.setSinkId(skSelectedSpeakerDeviceId).catch(() => {});
+        }
+    });
+    call.on('close', () => {
+        const el = skRemoteAudios.get(call.peer);
+        if (el) { el.remove(); skRemoteAudios.delete(call.peer); }
+        skActiveCalls.delete(call.peer);
+    });
+}
+
+async function startPTT(e) {
+    if (e) e.preventDefault();
+    if (!skIsOnline || skIsTransmitting) return;
+    if (e?.type === 'touchstart') { if (skPttTouchId !== null) return; skPttTouchId = e.changedTouches[0].identifier; }
+    if (!skLocalStream || !skLocalAudioTrack || skLocalAudioTrack.readyState === 'ended') {
+        if (!await skAcquireAudioStream(skSelectedMicDeviceId)) return;
+    }
+    skIsTransmitting = true;
+    if (skLocalAudioTrack) skLocalAudioTrack.enabled = true;
+    skCurrentlySpeaking = skMyCodename;
+    pttBtn.classList.add('transmitting');
+    pttIcon.className = 'fa-solid fa-broadcast-tower ptt-icon';
+    pttLabel.textContent = 'TX'; pttLabel.style.color = '#4ade80';
+    pttSub.textContent = 'TRANSMITINDO • E2E'; pttSub.style.color = '#4ade80';
+    const speakingMsg = { type: 'speaking', codename: skMyCodename, timestamp: Date.now() };
+    if (skIsHost) { skBroadcast(speakingMsg); } else if (skConnections.length > 0 && skConnections[0].open) { skConnections[0].send(JSON.stringify(speakingMsg)); }
+    skUpdateOpsUI();
+    if (pttSound) { try { pttSound.currentTime = 0; pttSound.play().catch(()=>{}); } catch(e){} }
+    skPlayChirp('start');
+}
+
+function stopPTT(e) {
+    if (e) e.preventDefault();
+    if (e?.type === 'touchend' || e?.type === 'touchcancel') { const found = [...(e.changedTouches||[])].find(t => t.identifier === skPttTouchId); if (!found) return; skPttTouchId = null; }
+    if (!skIsTransmitting) return;
+    skIsTransmitting = false;
+    if (skLocalAudioTrack) skLocalAudioTrack.enabled = false;
+    skCurrentlySpeaking = null;
+    pttBtn.classList.remove('transmitting');
+    pttIcon.className = 'fa-solid fa-microphone ptt-icon';
+    pttLabel.textContent = 'PTT'; pttLabel.style.color = '';
+    pttSub.textContent = 'SEGURE E FALE'; pttSub.style.color = '';
+    const stoppedMsg = { type: 'stopped_speaking', codename: skMyCodename };
+    if (skIsHost) { skBroadcast(stoppedMsg); } else if (skConnections.length > 0 && skConnections[0].open) { skConnections[0].send(JSON.stringify(stoppedMsg)); }
+    skUpdateOpsUI();
+    skPlayChirp('end');
+}
+
+function skPlayNextelPTT() { /* já integrado no startPTT */ }
+
+function skDisconnect() {
+    skIsOnline = false;
+    skReleaseWakeLock();
+    skActiveCalls.forEach(call => { try { call.close(); } catch(e){} });
+    skActiveCalls.clear();
+    skConnections.forEach(c => { try { c.close(); } catch(e){} });
+    skConnections = [];
+    if (skPeer) { try { skPeer.destroy(); } catch(e){} }
+    skPeer = null;
+    skRemoteAudios.forEach(el => el.remove());
+    skRemoteAudios.clear();
+    if (skLocalStream) { skLocalStream.getTracks().forEach(t => t.stop()); skLocalStream = null; skLocalAudioTrack = null; }
+    skConnectedOperators = [];
+    skCurrentlySpeaking = null;
+    skReconnectAttempts = 0;
+    skIsHost = false;
+    skUpdateUIOffline();
+}
+
+function skAttemptReconnect() {
+    if (skReconnectAttempts >= 5 || !skIsOnline) return;
+    skReconnectAttempts++;
+    connStatus.textContent = `Reconectando... (${skReconnectAttempts}/5)`;
+    setTimeout(() => { if (!skIsOnline) { if (skIsHost) skConnectCreate(); else skConnectJoin(); } }, Math.min(800 * skReconnectAttempts, 5000));
+}
+
+async function skRequestWakeLock() {
+    if ('wakeLock' in navigator) { try { skWakeLock = await navigator.wakeLock.request('screen'); } catch(e){} }
+}
+function skReleaseWakeLock() { if (skWakeLock) { skWakeLock.release(); skWakeLock = null; } }
+
+function skAskCodename() {
+    return new Promise(resolve => {
+        const saved = localStorage.getItem('sk_codename') || '';
+        const m = skCreateModal(`<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;"><div class="modal-title" style="margin:0;">SEU CODINOME TÁTICO</div><button class="modal-close" onclick="this.closest('.modal-bg').remove();"></button></div><div class="modal-sub">Identificação no canal. Será salvo automaticamente.</div><input class="modal-input" id="codename-inp" placeholder="Ex: ALPHA-01" maxlength="12" value="${saved}" autofocus><button class="modal-btn primary" id="codename-ok">CONFIRMAR</button>`);
+        const inp = m.querySelector('#codename-inp');
+        inp.focus(); inp.select();
+        m.querySelector('#codename-ok').onclick = () => {
+            const v = inp.value.trim() || 'Operador';
+            localStorage.setItem('sk_codename', v);
+            skMyCodename = v; m.remove(); resolve(v);
+        };
+        inp.addEventListener('keydown', e => { if (e.key === 'Enter') m.querySelector('#codename-ok').click(); });
+    });
+}
+
+function skShowModeChoice() {
+    return new Promise(resolve => {
+        const m = skCreateModal(`<div class="modal-title">MODO DE CONEXÃO</div><div class="modal-sub" style="margin-bottom:18px;">Escolha como deseja conectar</div><button class="modal-btn primary" id="mc-create"><i class="fa-solid fa-tower-broadcast"></i>&nbsp; CRIAR CANAL (você é o Host / Líder)</button><button class="modal-btn secondary" id="mc-join"><i class="fa-solid fa-right-to-bracket"></i>&nbsp; ENTRAR EM CANAL (código 4 dígitos)</button><button class="modal-btn danger" id="mc-cancel">Cancelar</button>`);
+        m.querySelector('#mc-create').onclick = () => { m.remove(); resolve('create'); };
+        m.querySelector('#mc-join').onclick = () => { m.remove(); resolve('join'); };
+        m.querySelector('#mc-cancel').onclick = () => { m.remove(); resolve(null); };
+    });
+}
+
+function skAskChannelCode() {
+    return new Promise(resolve => {
+        const m = skCreateModal(`<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;"><div class="modal-title" style="margin:0;">CÓDIGO DO CANAL</div><button class="modal-close" onclick="this.closest('.modal-bg').remove();"></button></div><div class="modal-sub">Digite o código de 4 dígitos gerado pelo Host</div><input class="modal-input" id="code-inp" placeholder="0000" maxlength="4" inputmode="numeric" pattern="[0-9]*" autofocus style="font-size:28px;font-family:'Space Grotesk',sans-serif;letter-spacing:8px;text-align:center;"><button class="modal-btn primary" id="code-ok">CONECTAR</button><button class="modal-btn danger" onclick="this.closest('.modal-bg').remove();">Cancelar</button>`);
+        const inp = m.querySelector('#code-inp');
+        inp.focus();
+        m.querySelector('#code-ok').onclick = () => {
+            const v = inp.value.trim();
+            if (v.length !== 4 || isNaN(v)) { inp.style.borderColor = '#ef4444'; inp.focus(); return; }
+            m.remove(); resolve(v);
+        };
+        inp.addEventListener('keydown', e => { if (e.key === 'Enter') m.querySelector('#code-ok').click(); });
+        inp.addEventListener('input', () => { inp.style.borderColor = ''; if (inp.value.length === 4) m.querySelector('#code-ok').focus(); });
+    });
+}
+
+// CORRIGIDO: Pede NOME LIVRE para o Joiner (Bruno, Paula, José, etc.)
+function skAskJoinerName() {
+    return new Promise(resolve => {
+        const lastName = localStorage.getItem('sk_last_joiner_name') || '';
+        const m = skCreateModal(`
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
+                <div class="modal-title" style="margin:0;">SEU NOME / CODINOME</div>
+                <button class="modal-close" onclick="this.closest('.modal-bg').remove();"></button>
+            </div>
+            <div class="modal-sub">Digite seu nome ou codinome tático (ex: Bruno, Paula, Líder Norte)</div>
+            <input class="modal-input" id="joiner-name-inp" placeholder="Seu Nome" maxlength="16" value="${lastName}" autofocus style="font-size:20px;">
+            <button class="modal-btn primary" id="joiner-name-ok">CONFIRMAR</button>
+            <button class="modal-btn danger" onclick="this.closest('.modal-bg').remove();">Cancelar</button>
+        `);
+        const inp = m.querySelector('#joiner-name-inp');
+        inp.focus();
+        inp.select();
+
+        m.querySelector('#joiner-name-ok').onclick = () => {
+            let v = inp.value.trim();
+            if (!v) v = 'Operador';
+            localStorage.setItem('sk_last_joiner_name', v);
+            m.remove();
+            resolve(v);
+        };
+
+        inp.addEventListener('keydown', e => {
+            if (e.key === 'Enter') m.querySelector('#joiner-name-ok').click();
+        });
+    });
+}
+
+async function togglePower() {
+    if (skIsOnline) { skDisconnect(); return; }
+    if (!skMyCodename) skMyCodename = await skAskCodename();
+    if (!skMyCodename) return;
+    const mode = await skShowModeChoice();
+    if (!mode) return;
+    connectingRing.style.display = 'block';
+    powerBtn.disabled = true;
+    if (mode === 'create') await skConnectCreate();
+    else if (mode === 'join') await skConnectJoin();
+}
+
+async function enumerateAudioDevices() {
+    try {
+        await navigator.mediaDevices.getUserMedia({ audio: true });
+        const devs = await navigator.mediaDevices.enumerateDevices();
+        skAudioDevices.input = devs.filter(d => d.kind === 'audioinput');
+        skAudioDevices.output = devs.filter(d => d.kind === 'audiooutput');
+        return true;
+    } catch(e) { return false; }
+}
+
+async function showAudioDeviceSelector() {
+    await enumerateAudioDevices();
+    if (!skAudioDevices.input.length) { skShowNotif('Nenhum dispositivo encontrado', '#991b1b'); return; }
+    let html = `<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;"><div class="modal-title" style="margin:0;">SELETOR DE ÁUDIO TÁTICO</div><button class="modal-close" onclick="this.closest('.modal-bg').remove();">×</button></div><div style="font-size:10px;color:#f59e0b;letter-spacing:2px;font-weight:700;margin-bottom:8px;">MICROFONE (INPUT)</div>`;
+    skAudioDevices.input.forEach((dev, i) => {
+        const isBT = /bluetooth|headset|fone|airpods|bose|jabra|sony|jbl/i.test(dev.label);
+        const label = dev.label || `Microfone ${i+1}`;
+        const sel = skSelectedMicDeviceId === dev.deviceId ? 'border-color:#4ade80;' : '';
+        html += `<div onclick="selectDev('${dev.deviceId}','input',this)" style="padding:11px 14px;margin:5px 0;background:#18181b;border:1px solid #27272a;${sel}border-radius:10px;cursor:pointer;display:flex;align-items:center;gap:10px;"><i class="fa-solid ${isBT?'fa-headset':'fa-microphone'}" style="color:#4ade80;"></i><span style="flex:1;font-size:13px;">${label}</span>${isBT?'<span style="font-size:9px;background:#166534;color:#4ade80;padding:2px 7px;border-radius:4px;font-weight:700;">BT</span>':''}</div>`;
+    });
+    if (skAudioDevices.output.length) {
+        html += `<div style="font-size:10px;color:#3b82f6;letter-spacing:2px;font-weight:700;margin:12px 0 8px;">ALTO-FALANTE (OUTPUT)</div>`;
+        skAudioDevices.output.forEach((dev, i) => {
+            const isBT = /bluetooth|headset|fone/i.test(dev.label);
+            const label = dev.label || `Saída ${i+1}`;
+            const sel = skSelectedSpeakerDeviceId === dev.deviceId ? 'border-color:#60a5fa;' : '';
+            html += `<div onclick="selectDev('${dev.deviceId}','output',this)" style="padding:11px 14px;margin:5px 0;background:#18181b;border:1px solid #27272a;${sel}border-radius:10px;cursor:pointer;display:flex;align-items:center;gap:10px;"><i class="fa-solid ${isBT?'fa-headset':'fa-volume-up'}" style="color:#60a5fa;"></i><span style="flex:1;font-size:13px;">${label}</span>${isBT?'<span style="font-size:9px;background:#1e40af;color:#60a5fa;padding:2px 7px;border-radius:4px;font-weight:700;">BT</span>':''}</div>`;
+        });
+    } else {
+        html += `<div style="font-size:12px;color:#52525b;padding:8px 0;">Saídas seguem o sistema automaticamente.</div>`;
+    }
+    html += `<div style="font-size:10px;color:#52525b;text-align:center;margin-top:12px;">Emparelhe o Bluetooth nas configurações do celular primeiro.</div>`;
+    skCreateModal(html);
+}
+
+window.selectDev = function(deviceId, type, el) {
+    if (type === 'input') {
+        skSelectedMicDeviceId = deviceId;
+        if (skIsOnline && skLocalStream) { skLocalStream.getTracks().forEach(t => t.stop()); skLocalStream = null; skLocalAudioTrack = null; }
+    } else {
+        skSelectedSpeakerDeviceId = deviceId;
+        skRemoteAudios.forEach(audioEl => { if (audioEl && typeof audioEl.setSinkId === 'function') audioEl.setSinkId(deviceId).catch(() => {}); });
+    }
+    el.closest('.modal-bg').remove();
+    skShowNotif(`${type === 'input' ? 'Microfone' : 'Saída'} selecionado(a)`);
+};
+
+let _pwaPrompt = null;
+window.addEventListener('beforeinstallprompt', e => {
+    e.preventDefault(); _pwaPrompt = e;
+    const ib = document.getElementById('install-btn');
+    ib.style.display = 'flex';
+});
+function installPWA() {
+    _pwaPrompt?.prompt();
+    _pwaPrompt?.userChoice.then(() => { document.getElementById('install-btn').style.display = 'none'; _pwaPrompt = null; });
+}
+window.addEventListener('appinstalled', () => { document.getElementById('install-btn').style.display = 'none'; skShowNotif('App instalado!'); });
+
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js').catch(e => { if (!e.message?.includes('same-origin')) console.warn('[SW]', e); });
+    });
+}
+
+document.getElementById('pq-toggle').addEventListener('change', async function() {
+    if (this.checked) {
+        document.getElementById('crypto-badge-text').textContent = 'MODO PÓS-QUÂNTICO (UI) • WebRTC nativo ativo';
+        skShowNotif('Modo Pós-Quântico ativado (UI only)');
+    } else {
+        document.getElementById('crypto-badge-text').textContent = 'Criptografia E2E Nativa WebRTC (DTLS+SRTP)';
+    }
+});
+
+document.addEventListener('keydown', e => { if (e.code === 'Space' && e.target === document.body && !e.repeat) { e.preventDefault(); startPTT(null); }});
+document.addEventListener('keyup', e => { if (e.code === 'Space') stopPTT(null); });
+
+console.log('%c[SHIN KAGE CRIPTO v2] Sistema tático carregado. Topologia estrela multi-operador ativa.', 'color:#22c55e;font-weight:700;');
+
+// Offline Detection & Status
+function updateOfflineStatus() {
+    const pill = document.getElementById('status-pill');
+    const pillText = document.getElementById('pill-text');
+    if (!pill || !pillText) return;
+
+    if (!navigator.onLine) {
+        pill.style.background = '#3f1f1f';
+        pill.style.borderColor = '#991b1b';
+        pillText.textContent = 'OFFLINE';
+        pillText.style.color = '#ef4444';
+    } else {
+        // Restore based on connection state (simplified)
+        if (pill.classList.contains('online')) {
+            pill.style.background = '#052e16';
+            pill.style.borderColor = '#166534';
+            pillText.style.color = '#4ade80';
+        }
+    }
+}
+
+window.addEventListener('online', updateOfflineStatus);
+window.addEventListener('offline', updateOfflineStatus);
+setTimeout(updateOfflineStatus, 500); // Initial check
+
+// Splash Screen with Lottie + Sound Effect + Offline Fallback
+const splashSound = document.getElementById('splash-sound');
+if (splashSound) {
+    splashSound.volume = 0.7;
+    splashSound.play().catch(() => {});
+}
+
+// Fallback for Lottie if it fails to load (offline or CDN issue)
+const lottieEl = document.getElementById('splash-lottie');
+const fallbackEl = document.getElementById('splash-lottie-fallback');
+if (lottieEl) {
+    lottieEl.addEventListener('error', () => {
+        lottieEl.style.display = 'none';
+        if (fallbackEl) fallbackEl.style.display = 'flex';
+    });
+    // Also fallback if it takes too long to load (offline simulation)
+    setTimeout(() => {
+        if (lottieEl && lottieEl.style.display !== 'none' && !lottieEl.getAttribute('data-loaded')) {
+            // If still not loaded properly, show fallback
+        }
+    }, 1500);
+}
+
+setTimeout(() => {
+    const splash = document.getElementById('splash-screen');
+    if (splash) {
+        splash.style.transition = 'opacity 0.8s ease';
+        splash.style.opacity = '0';
+        setTimeout(() => splash.remove(), 800);
+    }
+}, 2800); // Duração da animação Lottie
+</script>
+</body>
+</html>
